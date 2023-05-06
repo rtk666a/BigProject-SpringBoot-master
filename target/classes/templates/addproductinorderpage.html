@@ -1,0 +1,75 @@
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-6 mx-auto">
+            <h1 class="mt-3">ADD PRODUCT IN ORDER</h1>
+            <ul class="nav nav-pills">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" th:href="@{'/sortproductinorderpagebycategory/' + ${order.getId()} + '&category=0&page=add'}">All products</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                       aria-expanded="false">Categories</a>
+                    <ul class="dropdown-menu">
+                        <li th:each="c:${categories}"><a class="dropdown-item" th:href="@{'/sortproductinorderpagebycategory/' + ${order.getId()} + '&category=' +${c.getId()} + '&page=add'}" th:value="${c.id}" th:text="${c.name}"></a></li>
+                    </ul>
+                </li>
+            </ul>
+            <div id="orderStatus"></div>
+            <script>
+                var alertPlaceholder = document.getElementById('orderStatus')
+                var url_string = window.location.search.substring(1)
+                console.log(url_string)
+
+                function alert(message, type) {
+                    var wrapper = document.createElement('div')
+                    wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+
+                    alertPlaceholder.append(wrapper)
+                }
+
+                if (url_string === "error") {
+                    alert('Something went wrong.', 'danger')
+                } else if (url_string === "success") {
+                    alert('Added successfully', 'success')
+                }
+            </script>
+            <table class="table table-striped mt-3">
+                <thead>
+                <tr>
+                    <th scope="col" width="5%">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Price</th>
+                    <th scope="col" width="10%">Count</th>
+                    <th scope="col" class="text-end" width="10%"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${products}">
+                    <form th:action="@{'/editorder'}" method="post">
+                        <th scope="row" th:text="${p.id}"></th>
+                        <td th:text="${p.name}"></td>
+                        <td th:text="${p.category.name}"></td>
+                        <td th:text="${p.price}"></td>
+                        <td><input class="form-control" type="number" name="count" placeholder="0" required></td>
+                        <td>
+                            <input type="hidden" name="order_id" th:value="${order.id}">
+                            <input type="hidden" name="product_id" th:value="${p.id}">
+                            <button class="btn btn-secondary btn-sm">+</button>
+                        </td>
+                    </form>
+                </tr>
+                </tbody>
+            </table>
+            <a th:href="@{'/orderdetails/' +${order.getId() +'&page=orders'}}" class="btn btn-secondary btn-sm mt-3">BACK TO ORDER</a>
+        </div>
+    </div>
+</div>
+</html>
+</body>
+</html>

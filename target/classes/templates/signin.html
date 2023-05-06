@@ -1,0 +1,75 @@
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.88.1">
+    <title>Sign in</title>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/sign-in/">
+    <link rel="stylesheet" type="text/css" th:href="@{'/css/bootstrap.min.css'}">
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <link th:href="@{'/custom/signin.css'}" rel="stylesheet">
+</head>
+<body class="text-center">
+
+<main class="form-signin">
+    <div id="registerStatus"></div>
+    <script>
+        var alertPlaceholder = document.getElementById('registerStatus')
+        var url_string = window.location.search.substring(1)
+        console.log(url_string)
+
+        function alert(message, type) {
+            var wrapper = document.createElement('div')
+            wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+
+            alertPlaceholder.append(wrapper)
+        }
+
+        if (url_string==="error") {
+            alert('Invalid email or password.', 'danger')
+        }
+    </script>
+    <form th:action="@{'/enter'}" method="post">
+        <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+        <div class="form-floating">
+            <input type="email" class="form-control" name="user_email" id="floatingInput" placeholder="name@example.com" required>
+            <label for="floatingInput">Email address</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" class="form-control" name="user_password" id="floatingPassword" placeholder="Password">
+            <label for="floatingPassword">Password</label>
+        </div>
+
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+        <p class="mt-5 mb-3 text-muted">&copy; 2021–2022</p>
+    </form>
+</main>
+<script type="text/javascript" th:src="@{'/js/bootstrap.bundle.js'}"></script>
+</body>
+</html>

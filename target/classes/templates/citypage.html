@@ -1,0 +1,50 @@
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-3 mx-auto">
+            <h1 class="mt-3">CITY PAGE</h1>
+            <form th:action="@{'/addcity'}" method="post">
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label>CITY NAME:</label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <input type="text" name="city_name" class="form-control" placeholder="City name" required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <button class="btn btn-success">ADD CITY</button>
+                    </div>
+                </div>
+            </form>
+
+            <table class="table table-striped mt-3">
+                <thead>
+                <tr>
+                    <th scope="col" width="5%">ID</th>
+                    <th scope="col" class="text-center">Name</th>
+                    <th scope="col" class="text-end" width="10%"> </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="c : ${cities}">
+                    <th scope="row" th:text="${c.id}"></th>
+                    <td th:text="${c.name}" class="text-center"></td>
+                    <td><a th:href="@{'/citydetails/' +${c.getId()}}" class="btn btn-secondary">EDIT</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</html>
+</body>
+</html>

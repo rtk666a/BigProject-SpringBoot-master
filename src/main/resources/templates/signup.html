@@ -1,0 +1,86 @@
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-3 mx-auto">
+            <h1 class="mt-3">REGISTER USER</h1>
+            <div id="registerStatus"></div>
+            <script>
+                var alertPlaceholder = document.getElementById('registerStatus')
+                var url_string = window.location.search.substring(1)
+                console.log(url_string)
+
+                function alert(message, type) {
+                    var wrapper = document.createElement('div')
+                    wrapper.innerHTML = '<div class="alert alert-' + type + ' alert-dismissible" role="alert">' + message + '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>'
+
+                    alertPlaceholder.append(wrapper)
+                }
+
+                if (url_string === "regPassError") {
+                    alert('Your password are not same with re-typed password.', 'danger')
+                } else if (url_string === "regEmailError") {
+                    alert('Email already registered.', 'danger')
+                } else if (url_string === "regSuccess") {
+                    alert('Register completed', 'success')
+                }
+            </script>
+            <form th:action="@{'/signup'}" method="post">
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label>FULL NAME:</label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <input type="text" name="user_full_name" class="form-control" placeholder="Insert name"
+                               required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label>EMAIL:</label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <input type="text" name="user_email" class="form-control" placeholder="Insert email" required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label>PASSWORD:</label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <input type="password" name="user_password" class="form-control" placeholder="Insert password"
+                               required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <label>RE-PASSWORD:</label>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        <input type="password" name="user_conf_password" class="form-control"
+                               placeholder="Re-type password" required>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <button class="btn btn-success">Register user</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</html>
+</body>
+</html>

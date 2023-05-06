@@ -1,0 +1,63 @@
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-6 mx-auto">
+            <h1 class="mt-3">ORDER PAGE</h1>
+            <ul class="nav nav-pills">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{'/addorderpage'}">ADD ORDER</a>
+                </li>
+            </ul>
+            <table class="table table-striped mt-3">
+                <thead>
+                <tr>
+                    <th scope="col" width="5%">#</th>
+                    <th scope="col">Customer</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Time</th>
+                    <th scope="col" class="text-end" width="10%"></th>
+                </tr>
+                </thead>
+                <tbody id="orderTable">
+<!--                <tr th:each="o : ${orders}">-->
+<!--                    <th scope="row" th:text="${o.id}"></th>-->
+<!--                    <td th:text="${o.customer.name}"></td>-->
+<!--                    <td th:text="${o.getStatus()}"></td>-->
+<!--                    <td th:text="${o.orderTime}"></td>-->
+<!--                    <td><a th:href="@{'/orderdetails/' +${o.getId() +'&page=orders'}}" class="btn btn-secondary btn-sm">DETAILS</a></td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+            </table>
+            <script type="text/javascript">
+                function getOrder(){
+                    let xhttp = new XMLHttpRequest();
+                    xhttp.onload = function (){
+                        let result = this.responseText;
+                        let orderList = JSON.parse(result);
+                        let htmlCode = "";
+                        for (let i = 0; i < orderList.length; i++) {
+                            htmlCode += "<tr>";
+                            htmlCode += "<th scope='row'>" + orderList[i].id + "</th>"
+                            htmlCode += "<td scope='row'>" + orderList[i].customer.name + "</td>"
+                            htmlCode += "<td scope='row'>" + orderList[i].status + "</td>"
+                            htmlCode += "<td scope='row'>" + orderList[i].orderTime + "</td>"
+                            htmlCode += "<td scope='row'>" + "<a class='btn btn-secondary btn-sm' href='/orderdetails/" + orderList[i].id + "&page=orders'>DETAILS</a>"+"</td>"
+                            htmlCode += "</tr>";
+                        }
+                        document.getElementById("orderTable").innerHTML = htmlCode;
+                    }
+                    xhttp.open("GET", "http://localhost:8080/api/allorders");
+                    xhttp.send();
+                }
+                window.onload = getOrder();
+            </script>
+        </div>
+    </div>
+</div>
+</html>
+</body>
+</html>

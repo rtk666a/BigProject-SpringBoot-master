@@ -1,0 +1,94 @@
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    <div class="row">
+        <div class="col-6 mx-auto">
+            <h1 class="mt-3">ORDER DETAILS</h1>
+            <ul class="nav nav-pills">
+                <li class="nav-item" sec:authorize="isAuthenticated()" th:if="${order.status.equals('In progress')}">
+                    <a class="nav-link" th:href="@{'/addproductinorderpage/'+${order.getId()}}">Add products</a>
+                </li>
+            </ul>
+            <table class="table table-striped mt-3">
+                <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Count</th>
+                    <th scope="col">Price</th>
+                    <th scope="col" class="text-end" width="10%"></th>
+                    <th scope="col" class="text-end" width="5%" th:if="${order.status.equals('In progress')}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${order.getCountOfProducts()}">
+                    <td th:text="${p.getProduct().name}"></td>
+                    <td th:text="${p.getProduct().category.name}"></td>
+                    <td th:text="${p.getCount()}"></td>
+                    <td th:text="${p.getProduct().price}"></td>
+                    <td><a th:href="@{'/productdetails/' +${p.getProduct().getId()}}" class="btn btn-secondary btn-sm">DETAILS</a>
+                    </td>
+                    <td th:if="${order.status.equals('In progress')}">
+                        <form th:action="@{'/undoproduct'}" method="post">
+                            <input type="hidden" name="order_id" th:value="${order.id}">
+                            <input type="hidden" name="product_id" th:value="${p.id}">
+                            <button class="btn btn-danger btn-sm">-</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <label>OVERALL PRICE: <p th:text="${order.getOverAllPrice()}"></p></label>
+            <div class="row mt-3">
+                <div class="col-3">
+                    <form th:action="@{'/setorderstatus'}" method="post">
+                        <input type="hidden" name="id" th:value="${order.id}">
+                        <input type="hidden" name="page" th:value="${page}">
+                        <select class="form-control" name="status">
+                            <option th:selected="${order.getStatus().equals('In progress')}"
+                                    th:value="${'In progress'}">In progress
+                            </option>
+                            <option th:selected="${order.getStatus().equals('Done')}" th:value="${'Done'}">Done
+                            </option>
+                        </select>
+                        <div class="mt-2">
+                            <button class="btn btn-success">Finish</button>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                    data-bs-target="#deleteOrder">DELETE
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal fade" id="deleteOrder" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form th:action="${'/deleteorder'}" method="post">
+                                <input type="hidden" name="id" th:value="${order.id}">
+                                <input type="hidden" name="page" value="orders">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">DELETE ORDER</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">NO</button>
+                                    <button class="btn btn-danger">YES</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
+</body>
+</html>
